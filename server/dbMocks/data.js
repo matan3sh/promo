@@ -20,12 +20,12 @@ module.exports = {
       {
       "_id": user1Id,
       "avatar": "https://b.kisscc0.com/20180718/urw/kisscc0-ninja-computer-icons-samurai-youtube-avatar-ninja-5b4ed903c2dd20.4931332915318940197982.jpg",
-      "email": "filip@gmail.com",
-      "name": "Filip Jerga",
+      "email": "matan3sh@gmail.com",
+      "name": "Matan Shaviro",
       "info": "Bla bla bla bla",
       "createdAt": moment().toISOString(),
       "updatedAt": moment().toISOString(),
-      "username": "Rhonyn99",
+      "username": "matan3sh",
       "password": "testtest",
       "role": 'admin',
       "products": [product1Id]
