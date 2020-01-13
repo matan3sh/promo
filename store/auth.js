@@ -25,6 +25,16 @@ export const state = () => ({
         })
         .catch(error => Promise.reject(error))
     },
+    register(_, registerData) {
+      return this.$axios.post('/api/v1/users/register', registerData)
+        .catch(error => {
+          let errorMessage = 'Uuups, Something went wrong, try to register again!'
+          if (error.response.data.errors) {
+            errorMessage = error.response.data.errors.message
+          }
+          return Promise.reject(errorMessage)
+        })
+    },
     getAuthUser({commit, getters, state}) {
       const authUser = getters.authUser
   
@@ -39,6 +49,14 @@ export const state = () => ({
           commit('setAuthUser', null)
           return Promise.reject(error)
         })
+    },
+    logout({commit}) {
+      return this.$axios.$post('/api/v1/users/logout')
+        .then(() => {
+          commit('setAuthUser', null)
+          return true
+        })
+        .catch(error => Promise.reject(error))
     }
   }
   

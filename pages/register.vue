@@ -120,6 +120,7 @@
 import { required, email, minLength, url, sameAs } from 'vuelidate/lib/validators'
 import { supportedFileType } from '@/helpers/validators'
 export default {
+  middleware: 'guest',
   data() {
     return {
       form: {
@@ -160,10 +161,19 @@ validations: {
       }
     }
   },
+  computed: {
+    isFormValid() {
+      return !this.$v.form.$invalid
+    }
+  },
   methods: {
     register() {
       this.$v.form.$touch()
-      console.log(this.form)
+      if (this.isFormValid) {
+        this.$store.dispatch('auth/register', this.form)
+          .then(_ => this.$router.push('/login'))
+          .catch(error => this.$toasted.error(error, {duration: 3000}))
+      }
     }
   }
 }
