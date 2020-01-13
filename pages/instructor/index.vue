@@ -22,7 +22,6 @@
 <script>
 import InstructorHeader from "~/components/shared/Header";
 export default {
-  middleware: "admin",
   layout: "instructor",
   components: {
     InstructorHeader

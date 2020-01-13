@@ -1,20 +1,12 @@
 <template>
   <div>
     <instructor-header>
-        <template #actionMenu>
-            <div class="full-page-takeover-header-button">
-                <nuxt-link
-                    to="#"
-                    class="button is-medium is-light">
-                    New Course
-                </nuxt-link>
-                <nuxt-link
-                    to="/"
-                    class="button is-danger is-medium is-inverted is-outlined">
-                    Student
-                </nuxt-link>
-            </div>
-        </template>
+      <template #actionMenu>
+        <div class="full-page-takeover-header-button">
+          <nuxt-link to="#" class="button is-medium is-light">New Course</nuxt-link>
+          <nuxt-link to="/" class="button is-danger is-medium is-inverted is-outlined">Student</nuxt-link>
+        </div>
+      </template>
     </instructor-header>
     <div class="courses-page">
       <div class="container">
@@ -22,7 +14,7 @@
           <div class="column is-8 is-offset-2">
             <h1 class="courses-page-title">Your Courses</h1>
             <!-- Iterate Courses -->
-            <div class="tile is-ancestor">
+            <div v-for="portfolio in portfolios" :key="portfolio._id" class="tile is-ancestor">
               <div class="tile is-parent is-12">
                 <!-- Navigate to course manage page -->
                 <nuxt-link :to="'#'" class="tile tile-overlay-container is-child box">
@@ -36,16 +28,13 @@
                       </figure>
                     </div>
                     <div class="column">
-                      <p class="title">Dart and Flutter From Zero to Hero - Practical Dev Bootcamp</p>
-                      <p
-                        class="subtitle"
-                      >Build real mobile Application for Android and iOS. Learn Dart Framework and discover amazing features of Flutter.</p>
-                      <span class="tag" :class="'is-success'">Published</span>
+                      <p class="title">{{portfolio.title}}</p>
+                      <p class="subtitle">{{portfolio.subtitle}}</p>
+                      <span class="tag" :class="'is-success'">{{portfolio.status}}</span>
                     </div>
                     <div class="column is-narrow flex-centered">
                       <div class="price-title">
-                        <!-- {{course.price || 0}} $ -->
-                        178.99 $
+                        {{portfolio.price || 0}} $
                       </div>
                     </div>
                   </div>
@@ -64,6 +53,14 @@ export default {
   layout: "instructor",
   components: {
     InstructorHeader
+  },
+  computed: {
+    portfolios() {
+      return this.$store.state.instructor.portfolio.items;
+    }
+  },
+  fetch({ store }) {
+    return store.dispatch("instructor/portfolio/fetchInstructorPortfolios");
   }
 };
 </script>
