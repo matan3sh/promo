@@ -3,7 +3,7 @@
     <instructor-header>
       <template #actionMenu>
         <div class="full-page-takeover-header-button">
-          <nuxt-link to="#" class="button is-medium is-light">New Course</nuxt-link>
+          <nuxt-link to="/instructor/portfolio/create" class="button is-medium is-light">New Course</nuxt-link>
           <nuxt-link to="/" class="button is-danger is-medium is-inverted is-outlined">Student</nuxt-link>
         </div>
       </template>

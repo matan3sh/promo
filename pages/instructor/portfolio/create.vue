@@ -3,38 +3,47 @@
     <div class="full-page-takeover-page">
       <Header
         :title="`Step 1 of 2`"
-        exitLink="#" />
+        exitLink="/instructor/portfolios" />
       <div class="full-page-takeover-header-bottom-progress">
-        <div :style="{width: '50%'}"
+        <div :style="{width: progress}"
              class="full-page-takeover-header-bottom-progress-highlight">
         </div>
       </div>
       <div class="course-create full-page-takeover-container">
         <div class="container">
-          <PortfolioCreateStep1 />
-          <PortfolioCreateStep2 />
+          <keep-alive>
+            <component
+              :is="activeComponent"
+              ref="activeComponent"
+              @stepUpdated="mergeFormData"
+            />
+          </keep-alive>
         </div>
         <div class="full-page-footer-row">
           <div class="container">
             <div class="full-page-footer-col">
-              <div>
-                <a @click.prevent="() => {}" class="button is-large">Previous</a>
+              <div v-if="!isFirstStep">
+                <a @click.prevent="previousStep" class="button is-large">Previous</a>
               </div>
-              <!-- <div v-else class="empty-container">
-              </div> -->
+              <div v-else class="empty-container">
+              </div>
             </div>
             <div class="full-page-footer-col">
               <div>
                 <button
-                  @click.prevent="() => {}"
+                  v-if="!isLastStep"
+                  @click.prevent="nextStep"
+                  :disabled="!canProceed"
                   class="button is-large float-right">
                   Continue
                 </button>
-                <!-- <button
+                <button
+                  v-else
+                  :disabled="!canProceed"
                   @click="() => {}"
                   class="button is-success is-large float-right">
                   Confirm
-                </button> -->
+                </button>
               </div>
             </div>
           </div>
@@ -53,7 +62,54 @@ export default {
   components: { Header,
                 PortfolioCreateStep1,
                 PortfolioCreateStep2
+  },
+  data() {
+    return {
+      activeStep: 1,
+      steps: ['PortfolioCreateStep1', 'PortfolioCreateStep2'],
+      canProceed: false,
+      form: {
+        title: '',
+        category: ''
+      }
+    }
+  },
+  computed: {
+    stepsLength() {
+      return this.steps.length
     },
+    isLastStep() {
+      return this.activeStep === this.stepsLength
+    },
+    isFirstStep() {
+      return this.activeStep === 1
+    },
+    progress() {
+      return `${100 / this.stepsLength * this.activeStep}%`
+    },
+    activeComponent() {
+      return this.steps[this.activeStep - 1]
+    }
+  },
+  fetch({store}) {
+    return store.dispatch('category/fetchCategories')
+  },
+  methods: {
+    nextStep() {
+      this.activeStep++
+      this.$nextTick(() => {
+        this.canProceed = this.$refs.activeComponent.isValid
+      })
+    },
+    previousStep() {
+      this.activeStep--
+      this.canProceed = true
+    },
+    mergeFormData({data, isValid}) {
+      this.form = {...this.form, ...data}
+      this.canProceed = isValid
+    }
+  }
 }
 </script>
 

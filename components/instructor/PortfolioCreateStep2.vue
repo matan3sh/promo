@@ -8,10 +8,16 @@
       <div class="course-create-form-group">
         <div class="course-create-form-field">
           <div class="select is-large">
-            <select>
+            <select
+              v-model="form.category" 
+              @change="emitFormData">
               <option value="default">Select Category</option>
-              <option>Mobile Development</option>
-              <option>Web Development</option>
+              <option 
+                v-for="category in categories" 
+                :key="category._id"
+                :value="category._id">
+                {{category.name}}
+              </option>
             </select>
           </div>
         </div>
@@ -21,7 +27,36 @@
 </template>
 
 <script>
-export default {};
+import { required } from 'vuelidate/lib/validators'
+export default {
+  data() {
+    return {
+      form: {
+        category: 'default'
+      }
+    }
+  },
+  validations: {
+    form: {
+      category: {
+        required
+      }
+    }
+  },
+  computed: {
+    isValid() {
+      return !this.$v.$invalid && this.form.category !== 'default'
+    },
+    categories() {
+      return this.$store.state.category.items
+    }
+  },
+  methods: {
+      emitFormData() {
+        this.$emit('stepUpdated', {data: this.form, isValid: this.isValid})
+      }
+    }
+};
 </script>
 
 <style scoped>
