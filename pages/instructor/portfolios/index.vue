@@ -3,7 +3,7 @@
     <instructor-header>
       <template #actionMenu>
         <div class="full-page-takeover-header-button">
-          <nuxt-link to="/instructor/portfolio/create" class="button is-medium is-light">New Course</nuxt-link>
+          <nuxt-link to="/instructor/portfolio/create" class="button is-medium is-light">New Portfolio</nuxt-link>
           <nuxt-link to="/" class="button is-danger is-medium is-inverted is-outlined">Student</nuxt-link>
         </div>
       </template>
@@ -12,25 +12,25 @@
       <div class="container">
         <div class="columns">
           <div class="column is-8 is-offset-2">
-            <h1 class="courses-page-title">Your Courses</h1>
+            <h1 class="courses-page-title">Your Portfolios</h1>
             <!-- Iterate Courses -->
             <div v-for="portfolio in portfolios" :key="portfolio._id" class="tile is-ancestor">
               <div class="tile is-parent is-12">
                 <!-- Navigate to course manage page -->
-                <nuxt-link :to="'#'" class="tile tile-overlay-container is-child box">
+                <nuxt-link :to="`/instructor/portfolio/${portfolio._id}/manage`" class="tile tile-overlay-container is-child box">
                   <div class="tile-overlay">
-                    <span class="tile-overlay-text">Update Course</span>
+                    <span class="tile-overlay-text">Update Portfolio</span>
                   </div>
                   <div class="columns">
                     <div class="column is-narrow">
                       <figure class="image is-4by2 is-128x128">
-                        <img :src="'https://i.udemycdn.com/course/750x422/2381802_d90c_3.jpg'" />
+                        <img :src="portfolio.image || 'https://via.placeholder.com/150'" />
                       </figure>
                     </div>
                     <div class="column">
                       <p class="title">{{portfolio.title}}</p>
-                      <p class="subtitle">{{portfolio.subtitle}}</p>
-                      <span class="tag" :class="'is-success'">{{portfolio.status}}</span>
+                      <p class="subtitle">{{portfolio.subtitle || 'No subtitle provided yet'}}</p>
+                      <span class="tag" :class="createStatusClass(portfolio.status)">{{portfolio.status}}</span>
                     </div>
                     <div class="column is-narrow flex-centered">
                       <div class="price-title">
@@ -61,6 +61,15 @@ export default {
   },
   fetch({ store }) {
     return store.dispatch("instructor/portfolio/fetchInstructorPortfolios");
+  },
+  methods: {
+    createStatusClass(status) {
+      if(!status) return ''
+      if(status === 'published') return 'is-success'
+      if(status === 'active') return 'is-primary'
+      if(status === 'inactive') return 'is-warning'
+      if(status === 'deleted') return 'is-danger'
+    }
   }
 };
 </script>

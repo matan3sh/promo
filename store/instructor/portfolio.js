@@ -10,6 +10,9 @@
                 return state.items
             })
             .catch(error => Promise.reject(error))
+    },
+    createPortfolio(_, portfolioData) {
+        return this.$axios.$post('/api/v1/products', portfolioData)
     }
 }
 

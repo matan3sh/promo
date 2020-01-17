@@ -2,7 +2,7 @@
   <div class="full-page-takeover-window">
     <div class="full-page-takeover-page">
       <Header
-        :title="`Step 1 of 2`"
+        :title="`Step ${activeStep} of ${stepsLength}`"
         exitLink="/instructor/portfolios" />
       <div class="full-page-takeover-header-bottom-progress">
         <div :style="{width: progress}"
@@ -23,7 +23,7 @@
           <div class="container">
             <div class="full-page-footer-col">
               <div v-if="!isFirstStep">
-                <a @click.prevent="previousStep" class="button is-large">Previous</a>
+                <a @click.prevent="_previousStep" class="button is-large">Previous</a>
               </div>
               <div v-else class="empty-container">
               </div>
@@ -32,7 +32,7 @@
               <div>
                 <button
                   v-if="!isLastStep"
-                  @click.prevent="nextStep"
+                  @click.prevent="_nextStep"
                   :disabled="!canProceed"
                   class="button is-large float-right">
                   Continue
@@ -40,7 +40,7 @@
                 <button
                   v-else
                   :disabled="!canProceed"
-                  @click="() => {}"
+                  @click="createPortfolio"
                   class="button is-success is-large float-right">
                   Confirm
                 </button>
@@ -57,15 +57,16 @@
 import Header from '~/components/shared/Header'
 import PortfolioCreateStep1 from '~/components/instructor/PortfolioCreateStep1'
 import PortfolioCreateStep2 from '~/components/instructor/PortfolioCreateStep2'
+import MultiComponentMixin from "~/mixins/MultiComponentMixin"
 export default {
   layout: 'instructor',
   components: { Header,
                 PortfolioCreateStep1,
                 PortfolioCreateStep2
   },
+  mixins: [MultiComponentMixin],
   data() {
     return {
-      activeStep: 1,
       steps: ['PortfolioCreateStep1', 'PortfolioCreateStep2'],
       canProceed: false,
       form: {
@@ -74,40 +75,24 @@ export default {
       }
     }
   },
-  computed: {
-    stepsLength() {
-      return this.steps.length
-    },
-    isLastStep() {
-      return this.activeStep === this.stepsLength
-    },
-    isFirstStep() {
-      return this.activeStep === 1
-    },
-    progress() {
-      return `${100 / this.stepsLength * this.activeStep}%`
-    },
-    activeComponent() {
-      return this.steps[this.activeStep - 1]
-    }
-  },
-  fetch({store}) {
-    return store.dispatch('category/fetchCategories')
-  },
   methods: {
-    nextStep() {
-      this.activeStep++
+    _nextStep() {
+      this.nextStep()
       this.$nextTick(() => {
         this.canProceed = this.$refs.activeComponent.isValid
       })
     },
-    previousStep() {
-      this.activeStep--
+    _previousStep() {
+      this.previousStep()
       this.canProceed = true
     },
     mergeFormData({data, isValid}) {
       this.form = {...this.form, ...data}
       this.canProceed = isValid
+    },
+    createPortfolio() {
+      this.$store.dispatch('instructor/portfolio/createPortfolio', this.form)
+        .then(_ => this.$router.push('/instructor/portfolios'))
     }
   }
 }
