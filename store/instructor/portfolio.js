@@ -1,6 +1,7 @@
  export const state = () => ({
      items: [],
-     item: {}
+     item: {},
+     canUpdatePortfolio: false
  })
 
  export const actions = {
@@ -22,11 +23,25 @@
     createPortfolio(_, portfolioData) {
         return this.$axios.$post('/api/v1/products', portfolioData)
     },
+    updatePortfolio({state, commit}) {
+        const portfolio = state.item
+        return this.$axios.$patch(`/api/v1/products/${portfolio._id}`, portfolio)
+            .then(portfolio => {
+                commit('setPortfolio', portfolio)
+                commit('canUpdatePortfolio', false)
+                return state.item
+            })
+            .catch(error => Promise.reject(error))
+    },
+    // TODO: cache previous value and verify if you can update portfolio
+    // TODO: set canUpdate only when portfolio values has been updated
     updateLine({commit}, {index, value, field}) {
         commit('setLineValue', {index, value, field})
+        commit('canUpdatePortfolio', true)
     },
     updatePortfolioValue({commit}, {value, field}) {
         commit('setPortfolioValue', {value, field})
+        commit('canUpdatePortfolio', true)
     }
 }
 
@@ -39,6 +54,9 @@ export const mutations = {
     },
     setPortfolioValue(state, {value, field}) {
         state.item[field] = value
+    },
+    canUpdatePortfolio(state, canUpdate) {
+        state.canUpdatePortfolio = canUpdate
     },
     addLine(state, field) {
         state.item[field].push({value: ''})

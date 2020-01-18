@@ -2,7 +2,7 @@
 <template>
   <div class="full-page-takeover-header">
     <div class="full-page-takeover-header-logo">
-      <p class="full-page-takeover-header-logo-title">Matan Shaviro</p>
+      <p class="full-page-takeover-header-logo-title">Matan's Dashboard</p>
     </div>
     <div class="full-page-takeover-header-divider">
     </div>

@@ -44,9 +44,16 @@
         <div class="field">
           <label class="label">Category</label>
           <div class="select is-medium">
-            <select>
-              <option value="default">Select Category</option>
-              <!-- <option> </option> -->
+            <select 
+              :value="portfolio.category._id"
+              @change="($event) => emitPortfolioValue($event, 'category')"
+            >
+              <option 
+                v-for="category in categories"
+                :key="category._id"
+                :value="category._id">
+                {{category.name}}
+              </option>
             </select>
           </div>
         </div>
@@ -108,9 +115,24 @@ export default {
       required: true
     }
   },
+  computed: {
+    categories() {
+      return this.$store.state.category.items
+    }
+  },
   methods: {
     emitPortfolioValue(e, field) {
-      this.$emit('portfolioValueUpdated', {value: e.target.value, field})
+      const value = e.target.value
+
+      if (field === 'category') {
+        return this.emitCategory(value)
+      }
+
+      return this.$emit('portfolioValueUpdated', {value, field})
+    },
+    emitCategory(categoryId) {
+      const foundCategory = this.categories.find(c => c._id === categoryId)
+      this.$emit('portfolioValueUpdated', {value: foundCategory, field: 'category'})
     }
   }
 }

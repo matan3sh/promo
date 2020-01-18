@@ -10,7 +10,7 @@
           @removeClicked="removeLine($event, 'wsl')"
           @valueUpdated="updateLine($event, 'wsl')"  
           :lines="portfolio.wsl"
-          label="What tools did I use"
+          label="Which tools did i used"
         />
         <multi-line-text-input
           @addClicked="addLine('requirements')"

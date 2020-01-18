@@ -3,7 +3,12 @@
     <Header title="Project Name" exitLink="/instructor/portfolios">
       <template #actionMenu>
         <div class="full-page-takeover-header-button">
-          <button @click="() => {}" class="button is-primary is-inverted is-medium is-outlined">Save</button>
+          <button 
+            @click="updatePortfolio"
+            :disabled="!canUpdatePortfolio" 
+            class="button is-primary is-inverted is-medium is-outlined">
+            Save
+          </button>
         </div>
       </template>
     </Header>
@@ -75,15 +80,22 @@ export default {
         steps: ['TargetStudents', 'LandingPage', 'Price', 'Status']       
       }
   },
-  fetch({store, params}) {
-    return store.dispatch('instructor/portfolio/fetchPortfolioById', params.id)
+  async fetch({store, params}) {
+    await store.dispatch('instructor/portfolio/fetchPortfolioById', params.id)
+    await store.dispatch('category/fetchCategories')
   },
   computed: {
     ...mapState({
-      portfolio: ({instructor}) => instructor.portfolio.item
+      portfolio: ({instructor}) => instructor.portfolio.item,
+      canUpdatePortfolio: ({instructor}) => instructor.portfolio.canUpdatePortfolio
     })
   },
   methods: {
+    updatePortfolio() {
+      this.$store.dispatch('instructor/portfolio/updatePortfolio')
+        .then(_ => this.$toasted.success('Project has been succesfully updated!', {duration: 3000}))
+        .catch(error => this.$toasted.error('Project cannot be updated!', {duration: 3000}))
+    },
     handlePortfolioUpdate({value, field}) {
       this.$store.dispatch('instructor/portfolio/updatePortfolioValue', {field, value})
     }
