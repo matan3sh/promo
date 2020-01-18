@@ -1,6 +1,6 @@
 <template>
   <div class="manage-page">
-    <Header title="Some very nice course name" exitLink="/instructor/portfolios">
+    <Header title="Project Name" exitLink="/instructor/portfolios">
       <template #actionMenu>
         <div class="full-page-takeover-header-button">
           <button @click="() => {}" class="button is-primary is-inverted is-medium is-outlined">Save</button>
@@ -17,11 +17,11 @@
               <ul class="menu-list">
                 <li>
                   <!-- display TargetStudents -->
-                  <a @click.prevent="navigateTo(1)" :class="activeComponentClass(1)">Target Your Students</a>
+                  <a @click.prevent="navigateTo(1)" :class="activeComponentClass(1)">Target Your Skills</a>
                 </li>
                 <li>
                   <!-- display LandingPage -->
-                  <a @click.prevent="navigateTo(2)" :class="activeComponentClass(2)">Portfolio Landing Page</a>
+                  <a @click.prevent="navigateTo(2)" :class="activeComponentClass(2)">Landing Page</a>
                 </li>
               </ul>
               <p class="menu-label">Managment</p>
@@ -40,7 +40,9 @@
           <div class="column">
             <keep-alive>
               <components
+                @portfolioValueUpdated="handlePortfolioUpdate"
                 :is="activeComponent"
+                :portfolio="portfolio"
               />
             </keep-alive>
           </div>
@@ -57,6 +59,7 @@ import TargetStudents from "~/components/instructor/TargetStudents";
 import Price from "~/components/instructor/Price";
 import Status from "~/components/instructor/Status";
 import MultiComponentMixin from "~/mixins/MultiComponentMixin";
+import { mapState } from 'vuex'
 export default {
   layout: "instructor",
   components: {
@@ -71,6 +74,19 @@ export default {
       return {
         steps: ['TargetStudents', 'LandingPage', 'Price', 'Status']       
       }
+  },
+  fetch({store, params}) {
+    return store.dispatch('instructor/portfolio/fetchPortfolioById', params.id)
+  },
+  computed: {
+    ...mapState({
+      portfolio: ({instructor}) => instructor.portfolio.item
+    })
+  },
+  methods: {
+    handlePortfolioUpdate({value, field}) {
+      this.$store.dispatch('instructor/portfolio/updatePortfolioValue', {field, value})
+    }
   }
 };
 </script>

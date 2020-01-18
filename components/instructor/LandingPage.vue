@@ -1,14 +1,16 @@
 <template>
   <div class="card manage-card">
     <header class="card-header card-section">
-      <p class="card-header-title">Course Landing Page</p>
+      <p class="card-header-title">Project Landing Page</p>
     </header>
     <div class="card-content card-section">
       <form>
         <div class="field">
-          <label class="label">Course title</label>
+          <label class="label">Project title</label>
           <div class="control">
             <input
+              :value="portfolio.title"
+              @input="($event) => emitPortfolioValue($event, 'title')"
               class="input is-medium"
               type="text"
               placeholder="Dart and Flutter From Zero to Hero "
@@ -16,9 +18,11 @@
           </div>
         </div>
         <div class="field">
-          <label class="label">Course subtitle</label>
+          <label class="label">Project subtitle</label>
           <div class="control">
             <input
+              :value="portfolio.subtitle"
+              @input="($event) => emitPortfolioValue($event, 'subtitle')"
               class="input is-medium"
               type="text"
               placeholder="Build real mobile Application for Android and iOS."
@@ -26,9 +30,11 @@
           </div>
         </div>
         <div class="field">
-          <label class="label">Course description</label>
+          <label class="label">Project description</label>
           <div class="control">
             <textarea
+              :value="portfolio.description"
+              @input="($event) => emitPortfolioValue($event, 'description')"
               class="textarea is-medium"
               type="text"
               placeholder="Write something catchy about the course"
@@ -45,16 +51,18 @@
           </div>
         </div>
         <div class="field">
-          <label class="label">Course Image</label>
+          <label class="label">Project Image</label>
           <div class="columns">
             <div class="column">
               <figure class="image is-4by2">
-                <img :src="''" />
+                <img :src="portfolio.image" />
               </figure>
             </div>
             <div class="column centered">
               <div class="control">
                 <input
+                  :value="portfolio.image"
+                  @input="($event) => emitPortfolioValue($event, 'image')"
                   class="input is-medium"
                   type="text"
                   placeholder="https://images.unsplash.com/photo-1498837167922-ddd27525d352"
@@ -64,9 +72,11 @@
           </div>
         </div>
         <div class="field">
-          <label class="label">Course Link</label>
+          <label class="label">Project Link</label>
           <div class="control">
             <input
+              :value="portfolio.productLink"
+              @input="($event) => emitPortfolioValue($event, 'productLink')"
               class="input is-medium"
               type="text"
               placeholder="https://www.udemy.com/vue-js-2-the-full-guide-by-real-apps-vuex-router-node"
@@ -74,9 +84,11 @@
           </div>
         </div>
         <div class="field">
-          <label class="label">Course Video Link</label>
+          <label class="label">Project Video Link</label>
           <div class="control">
             <input
+              :value="portfolio.promoVideoLink"
+              @input="($event) => emitPortfolioValue($event, 'promoVideoLink')"
               class="input is-medium"
               type="text"
               placeholder="https://www.youtube.com/watch?v=WQ9sCAhRh1M"
@@ -87,3 +99,19 @@
     </div>
   </div>
 </template>
+
+<script>
+export default {
+  props: {
+    portfolio: {
+      type: Object,
+      required: true
+    }
+  },
+  methods: {
+    emitPortfolioValue(e, field) {
+      this.$emit('portfolioValueUpdated', {value: e.target.value, field})
+    }
+  }
+}
+</script>
