@@ -1,6 +1,6 @@
 <template>
   <div class="instructor-page">
-    <instructor-header />
+    <instructor-header title="Panel"/>
     <div class="centered">
       <div class="columns">
         <!-- Go to /instructor/courses -->
@@ -8,7 +8,7 @@
           <div>Projects</div>
         </div>
         <!-- Go to /instructor/blogs -->
-        <div class="box" @click="() => {}">
+        <div class="box" @click="() => $router.push('/instructor/blogs')">
           <div>Blogs</div>
         </div>
         <!-- Go to /instructor/heroes -->

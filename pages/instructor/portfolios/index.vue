@@ -1,6 +1,6 @@
 <template>
   <div>
-    <instructor-header>
+    <instructor-header title="Management">
       <template #actionMenu>
         <div class="full-page-takeover-header-button">
           <nuxt-link to="/instructor/portfolio/create" class="button is-medium is-light">New Portfolio</nuxt-link>
