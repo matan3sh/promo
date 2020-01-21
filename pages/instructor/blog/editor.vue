@@ -6,7 +6,7 @@
     />
     <div class="blog-editor-container">
       <div class="container">
-        <editor />
+        <editor @editorUpdated="saveBlog"/>
       </div>
     </div>
   </div>
@@ -18,13 +18,15 @@ import Editor from '~/components/editor'
 export default {
   layout: 'instructor',
   components: {
-    Header,
-    Editor
+    Header, Editor
+  },
+  methods: {
+    saveBlog(blogData) {
+      this.$store.dispatch('instructor/blog/createBlog', blogData)
+        .then(blog => this.$router.push(`/instructor/blog/${blog._id}/edit`))
+    }
   }
 }
 </script>
 <style lang="scss">
-  .blog-editor-container {
-    padding-top: 60px;
-  }
 </style>
