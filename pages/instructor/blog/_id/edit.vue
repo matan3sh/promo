@@ -5,9 +5,10 @@
       title="Write your blog"
       exitLink="/instructor/blogs">
       <!-- TODO: Check if blog status is active -->
-      <template #actionMenu>
+      <template v-if="blog.status === 'active'" #actionMenu>
         <div class="full-page-takeover-header-button">
           <Modal
+            @submitted="updateBlogStatus($event, 'published')"
             @opened="checkBlogValidity"
             openTitle="Publish"
             openBtnClass="button is-success is-medium is-inverted is-outlined"
@@ -16,11 +17,10 @@
               <div class="title">Once you publish blog you cannot change url to a blog.</div>
               <!-- Check for error -->
               <div v-if="!publishError">
-                <div class="subtitle">Current Url is:</div>
+                <div class="subtitle">This is how url to blog post will look like after publish:</div>
                 <article class="message is-success">
                   <div class="message-body">
-                    <!-- Get here actual slug -->
-                    <strong>some-slug</strong>
+                    <strong>{{getCurrentUrl()}}/blogs/{{slug}}</strong>
                   </div>
                 </article>
               </div>
@@ -33,9 +33,10 @@
           </Modal>
         </div>
       </template>
-      <!-- <template v-else #actionMenu>
+      <template v-else #actionMenu>
         <div class="full-page-takeover-header-button">
           <Modal
+            @submitted="updateBlogStatus($event, 'active')"
             openTitle="Unpublish"
             openBtnClass="button is-success is-medium is-inverted is-outlined"
             title="Unpublish Blog">
@@ -44,7 +45,7 @@
             </div>
           </Modal>
         </div>
-      </template> -->
+      </template>
     </Header>
     <div class="blog-editor-container">
       <div class="container">
@@ -63,6 +64,8 @@ import Editor from '~/components/editor'
 import Header from '~/components/shared/Header'
 import Modal from '~/components/shared/Modal'
 import { mapState } from 'vuex'
+import slugify from 'slugify'
+// slug is something like unique ID but in readable format
 export default {
   layout: 'instructor',
   components: {
@@ -70,14 +73,18 @@ export default {
   },
   data() {
     return {
-      publishError: ''
+      publishError: '',
+      slug: ''
     }
   },
   computed: {
     ...mapState({
       blog: ({instructor}) => instructor.blog.item,
       isSaving: ({instructor}) => instructor.blog.isSaving
-    })
+    }),
+    editor() {
+      return this.$refs.editor
+    }
   },
   async fetch({params, store}) {
     await store.dispatch('instructor/blog/fetchBlogById', params.id)
@@ -96,14 +103,37 @@ export default {
         .catch(error => this.$toasted.error('Blog cannot be saved!', {duration: 2000}))
       }
     },
+    updateBlogStatus({closeModal}, status) {
+      const blogContent = this.editor.getContent()
+      blogContent.status = status
+      const message = status === 'published' ? 'Blog has been published!' : 'Blog has been un-published!'
+      this.$store.dispatch('instructor/blog/updateBlog', {data: blogContent, id: this.blog._id})
+        .then(_ => {
+          this.$toasted.success(message, {duration: 3000})
+          closeModal()
+        })
+        .catch(error => this.$toasted.error('Blog cannot be published!', {duration: 3000}))
+    },
     checkBlogValidity() {
-      const title = this.$refs.editor.getNodeValueByName('title')
+      const title = this.editor.getNodeValueByName('title')
       this.publishError = ''
+      this.slug = ''
       if (title && title.length > 24) {
-        // create slug from title
+        this.slug = this.slugify(title)
       } else {
         this.publishError = 'Cannot publish! Title needs to be longer than 24 characters!'
       }
+    },
+    getCurrentUrl() {
+      // process.client will return true if we are in browser environment
+      return process.client && window.location.origin
+    },
+    slugify(text) {
+      return slugify(text, {
+        replacement: '-',
+        remove: null,
+        lower: true
+      })
     }
   }
 }

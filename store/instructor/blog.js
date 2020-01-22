@@ -1,4 +1,19 @@
+function separateBlogs(blogs) {
+  const published = []
+  const drafts = []
+
+  blogs.forEach(blog => {
+    blog.status === 'active' ? drafts.push(blog) : published.push(blog)
+  })
+
+  return {published, drafts}
+}
+
 export const state = () => ({
+  items: {
+    drafts: [],
+    published: []
+  },
   item: {},
   isSaving: false
 })
@@ -12,6 +27,28 @@ export const actions = {
   fetchBlogById({commit}, blogId) {
     return this.$axios.$get(`/api/v1/blogs/${blogId}`)
       .then(blog => commit('setBlog', blog))
+  },
+  fetchUserBlogs({commit, state}) {
+    return this.$axios.$get('/api/v1/blogs/me')
+      .then(blogs => {
+        debugger
+        const { published, drafts } = separateBlogs(blogs)
+        commit('setBlogs', {resource: 'drafts', items: drafts})
+        commit('setBlogs', {resource: 'published', items: published})
+
+        return { published, drafts }
+      })
+  },
+  deleteBlog({commit, state}, blog) {
+    debugger
+    const resource = blog.status === 'active' ? 'drafts' : 'published'
+    return this.$axios.$delete(`/api/v1/blogs/${blog._id}`)
+      .then(_ => {
+        const index = state.items[resource].findIndex((b) => b._id === blog._id )
+        commit('deleteBlog', {resource, index})
+        return true
+      })
+      .catch(error => Promise.reject(error))
   },
   updateBlog({commit, state}, {data, id}) {
     commit('setIsSaving', true)
@@ -31,6 +68,12 @@ export const actions = {
 export const mutations = {
   setBlog(state, blog) {
     state.item = blog
+  },
+  setBlogs(state, {resource, items}) {
+    state.items[resource] = items
+  },
+  deleteBlog(state, {resource, index}) {
+    state.items[resource].splice(index, 1)
   },
   setIsSaving(state, isSaving) {
     state.isSaving = isSaving
