@@ -46,6 +46,7 @@ export default {
   // This is called only on client (in browser)
   mounted() {
     this.editor = new Editor({
+      content: this.initialContent,
       editable: false,
       extensions: [
         new Doc(),
@@ -70,7 +71,6 @@ export default {
         })
       ]
     })
-    this.initialContent && this.editor.setContent(this.initialContent)
   },
   beforeDestroy() {
     // Always destroy your editor instance when it's no longer needed

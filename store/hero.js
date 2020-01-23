@@ -1,0 +1,30 @@
+export const state = () => ({
+    item: null
+  })
+  
+  
+  export const actions = {
+    createHero({commit, state}, portfolioHeroData) {
+      return this.$axios.$post('/api/v1/product-heroes', portfolioHeroData)
+        .then(hero => {
+          commit('setHero', hero)
+          return state.item
+        })
+        .catch(error => Promise.reject(error))
+    },
+    fetchHero({commit, state}) {
+        return this.$axios.$get('/api/v1')
+            .then(data => {
+                const { productHero } = data
+                commit('setHero', productHero)
+                return state.item
+            })
+            .catch(error => Promise.error(error))
+    }
+  }
+  
+  export const mutations = {
+    setHero(state, hero) {
+      state.item = hero
+    }
+  }

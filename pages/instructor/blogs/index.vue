@@ -60,6 +60,7 @@
                 <div
                   v-for="pBlog in published"
                   :key="pBlog._id"
+                  :class="{featured: pBlog.featured}"
                   class="blog-card">
                   <!-- title -->
                   <h2>{{displayBlogTitle(pBlog)}}</h2>
@@ -70,7 +71,7 @@
                     </span>
                     <dropdown
                       @optionChanged="handleOption($event, pBlog)"
-                      :items="publishedOptions" />
+                      :items="publishedOptions(pBlog.featured)" />
                   </div>
                 </div>
               </div>
@@ -105,9 +106,6 @@ export default {
       published: ({instructor}) => instructor.blog.items.published,
       drafts: ({instructor}) => instructor.blog.items.drafts
     }),
-    publishedOptions() {
-      return createPublishedOptions()
-    },
     draftsOptions() {
       return createDraftsOptions()
     }
@@ -123,6 +121,18 @@ export default {
       if (command === commands.DELETE_BLOG) {
         this.displayDeleteWarning(blog)
       }
+      if (command === commands.TOGGLE_FEATURE) {
+        this.updateBlog(blog)
+      }
+    },
+    updateBlog(blog) {
+      const featured = !blog.featured
+      const featureStatus = featured ? 'Featured' : 'Un-Featured'
+      this.$store.dispatch('instructor/blog/updatePublishedBlog', {id: blog._id, data: {featured}})
+      .then(_ => this.$toasted.success(`Blog has been ${featureStatus}!`, {duration: 2000}))
+    },
+    publishedOptions(isFeatured) {
+      return createPublishedOptions(isFeatured)
     },
     displayDeleteWarning(blog) {
      const isConfirm = confirm('Are you sure you want to delete blog ?')
@@ -157,7 +167,7 @@ export default {
       color: rgba(0, 0, 0, 0.54);
     }
     &.featured {
-      border-left: 5px solid #3cc314;
+      border-left: 8px solid #3cc314;
       padding-left: 10px;
       transition: border ease-out 0.2s;
     }

@@ -5,19 +5,18 @@
         <button
           @click="emitUpdate"
           :disabled="isSaving"
-          class="button is-success button-save">
+class="button is-success button-save">
           Save
         </button>
       </template>
     </basic-menu>
     <bubble-menu :editor="editor" />
     <editor-content
-      class="editor__content"
+class="editor__content"
       :editor="editor"
     />
   </div>
 </template>
-
 <script>
 import { Editor, EditorContent } from 'tiptap'
 import BubbleMenu from '~/components/editor/BubbleMenu'
@@ -53,6 +52,9 @@ export default {
     isSaving: {
       required: false,
       default: false
+    },
+    mode: {
+      default: 'none'
     }
   },
   data() {
@@ -62,7 +64,37 @@ export default {
   },
   // This is called only on client (in browser)
   mounted() {
-    this.editor = new Editor({
+    if (this.mode === 'none') { return this.initEditor() }
+    this.$emit('editorMounted', this.setInitialContent)
+  },
+  beforeDestroy() {
+    // Always destroy your editor instance when it's no longer needed
+    this.editor && this.editor.destroy()
+  },
+  methods: {
+    emitUpdate() {
+      const content = this.getContent()
+      this.$emit('editorUpdated', content)
+    },
+    getContent() {
+      const html = this.editor.getHTML()
+      const title = this.getNodeValueByName('title')
+      const subtitle = this.getNodeValueByName('subtitle')
+      return {content: html, title, subtitle}
+    },
+    getNodeValueByName(name) {
+      const docContent = this.editor.state.doc.content
+      const nodes = docContent.content
+      const node = nodes.find(n => n.type.name === name)
+      if (!node) return ''
+      return node.textContent
+    },
+    setInitialContent(content) {
+      this.initEditor(content);
+    },
+    initEditor(content = '') {
+      this.editor = new Editor({
+      content,
       extensions: [
         new Doc(),
         new Title(),
@@ -99,38 +131,10 @@ export default {
         })
       ]
     })
-    // this.$emit('editorMounted', this.editor)
-    this.$emit('editorMounted', this.setInitialContent)
-  },
-  beforeDestroy() {
-    // Always destroy your editor instance when it's no longer needed
-    this.editor && this.editor.destroy()
-  },
-  methods: {
-    emitUpdate() {
-      const content = this.getContent()
-      this.$emit('editorUpdated', content)
-    },
-    getContent() {
-      const html = this.editor.getHTML()
-      const title = this.getNodeValueByName('title')
-      const subtitle = this.getNodeValueByName('subtitle')
-      return {content: html, title, subtitle}
-    },
-    getNodeValueByName(name) {
-      const docContent = this.editor.state.doc.content
-      const nodes = docContent.content
-      const node = nodes.find(n => n.type.name === name)
-      if (!node) return ''
-      return node.textContent
-    },
-    setInitialContent(content) {
-      this.editor.setContent(content)
     }
   }
 }
 </script>
-
 <style scoped lang="scss">
   .button-save {
     float: right;
