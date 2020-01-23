@@ -32,13 +32,17 @@
         <div class="field">
           <label class="label">Project description</label>
           <div class="control">
-            <textarea
+            <!-- <textarea
               :value="portfolio.description"
               @input="($event) => emitPortfolioValue($event, 'description')"
               class="textarea is-medium"
               type="text"
               placeholder="Write something catchy about the course"
-            ></textarea>
+            ></textarea> -->
+            <portfolio-editor
+              :initialContent="portfolio.description"
+              @editorUpdated="(content) => emitPortfolioValue(content, 'description')"
+            />
           </div>
         </div>
         <div class="field">
@@ -108,7 +112,11 @@
 </template>
 
 <script>
+import PortfolioEditor from '~/components/editor/PortfolioEditor'
 export default {
+  components: {
+    PortfolioEditor
+  },
   props: {
     portfolio: {
       type: Object,
@@ -122,7 +130,7 @@ export default {
   },
   methods: {
     emitPortfolioValue(e, field) {
-      const value = e.target.value
+      const value = e.target ? e.target.value : e
 
       if (field === 'category') {
         return this.emitCategory(value)
