@@ -1,6 +1,7 @@
 
 export const state = () => ({
-    items: []
+    items: [],
+    item: {}
 })
 
 export const actions = {
@@ -10,5 +11,19 @@ export const actions = {
                 commit('setItems', { resource: 'portfolio', items: portfolios}, { root: true })
                 return state.items
             })
+    },
+    fetchPortfolioBySlug({commit, state}, portfolioSlug) {
+        return this.$axios.$get(`/api/v1/products/s/${portfolioSlug}`)
+            .then(portfolio => {
+                commit('setPortfolio', portfolio)
+                return state.portfolio
+            })
+            .catch(error => Promise.reject(error))
+    }
+}
+
+export const mutations = {
+    setPortfolio(state, portfolio) {
+        state.item = portfolio
     }
 }

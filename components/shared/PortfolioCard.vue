@@ -26,7 +26,7 @@
       </div>
     </div>
     <footer class="card-footer">
-      <nuxt-link :to="''" class="card-footer-item">Learn More</nuxt-link>
+      <nuxt-link :to="`/portfolios/${portfolio.slug}`" class="card-footer-item">Learn More</nuxt-link>
       <a target="_" :href="portfolio.productLink" class="card-footer-item">Enroll</a>
     </footer>
   </div>
