@@ -1,6 +1,5 @@
 export default (_, inject) => {
     inject('applyParamsToUrl', (url, filter) => {
-      debugger
       if (filter) {
         let filteredEntities = ''
         if (url.indexOf('?') === -1) {

@@ -1,5 +1,19 @@
 <template>
   <div>
+    <product-hero
+      :title="portfolio.title"
+      :subtitle="portfolio.subtitle"
+      :author="portfolio.author"
+    >
+      <product-hero-card
+        :price="portfolio.price"
+        :discountedPrice="portfolio.discountedPrice"
+        :navigateTo="portfolio.productLink"
+        :requirements="portfolio.requirements"
+        :image="portfolio.image"
+        :promoVideoLink="portfolio.promoVideoLink"
+      />
+    </product-hero>
     <div class="container">
       <div class="columns">
         <div class="column is-9">
@@ -28,7 +42,13 @@
 </template>
 
 <script>
+import ProductHero from "~/components/ProductHero";
+import ProductHeroCard from "~/components/ProductHeroCard";
 export default {
+  components: {
+    ProductHero,
+    ProductHeroCard
+  },
   computed: {
     portfolio() {
       return this.$store.state.portfolio.item;
@@ -94,5 +114,12 @@ export default {
       min-height: 30px;
     }
   }
+}
+.youtube {
+  
+  width: 80%;
+  max-width: 650px;
+  margin-left: 20px;
+
 }
 </style>

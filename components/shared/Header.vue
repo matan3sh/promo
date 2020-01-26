@@ -13,7 +13,7 @@
       <figure class="image is-48x48 m-r-sm">
         <img class="is-rounded" :src="user.avatar">
       </figure>
-      <div class="m-r-sm m-b-sm">
+      <div class="m-r-sm">
         Welcome {{user.username}}!
       </div>
     </div>
@@ -51,7 +51,6 @@ export default {
   .user-box {
     align-items: center;
     display: flex;
-    flex-wrap: wrap;
     justify-content: flex-start;
     margin-right: 10px;
     font-size: 17px;

@@ -6,7 +6,8 @@
       </nuxt-link>
       <!-- Adds click to open -->
       <!-- Adds active class -->
-      <a @click="() => {}"
+      <a @click="isActive = !isActive"
+         :class="{'is-active' : isActive}"
          role="button"
          class="navbar-burger burger"
          aria-label="menu"
@@ -19,24 +20,26 @@
     </div>
 
     <!-- Adds active class -->
-    <div id="navbarBasicExample"
-         class="navbar-menu">
+    <div 
+        id="navbarBasicExample"
+        :class="{'is-active' : isActive}" 
+        class="navbar-menu">
       <div class="navbar-start">
-        <nuxt-link to="/" class="navbar-item">
+        <nav-link to="/" class="navbar-item">
           Home
-        </nuxt-link>
-        <nuxt-link to="#" class="navbar-item">
-          Courses
-        </nuxt-link>
-        <nuxt-link to="/blogs" class="navbar-item">
+        </nav-link>
+        <nav-link to="/portfolios" class="navbar-item">
+          Projects
+        </nav-link>
+        <nav-link to="/blogs" class="navbar-item">
           Blogs
-        </nuxt-link>
-        <nuxt-link to="#" class="navbar-item">
+        </nav-link>
+        <nav-link to="/about" class="navbar-item">
           About
-        </nuxt-link>
-        <nuxt-link to="#" class="navbar-item">
+        </nav-link>
+        <nav-link to="/cv" class="navbar-item">
           CV
-        </nuxt-link>
+        </nav-link>
       </div>
 
       <div class="navbar-end">
@@ -78,6 +81,11 @@
 <script>
 import { mapGetters } from 'vuex'
 export default {
+  data() {
+    return {
+      isActive: false
+    }
+  },
   computed: {
     ...mapGetters({
       'user': 'auth/authUser',
@@ -100,6 +108,10 @@ export default {
   }
   .navbar-brand {
     padding-right: 30px;
+
+    @media screen and (max-width: 1023px) {
+      padding-right: 0px;
+    }
   }
   .avatar {
     margin-right: 5px;

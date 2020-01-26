@@ -13,7 +13,21 @@
           <!-- iterate columns with v-for and don't forget :key -->
           <div v-for="portfolio in portfolios" :key="portfolio._id" class="column is-one-quarter">
             <!-- pass a portfolio as a prop to portfolio-card -->
-            <portfolio-card :portfolio="portfolio" />
+            <v-popover
+              offset="16"
+              trigger="hover"
+              placement="right-start"
+            >
+              <portfolio-card :portfolio="portfolio" />
+              <template slot="popover">
+                <portfolio-card-tooltip 
+                  :title="portfolio.title"
+                  :subtitle="portfolio.category.name"
+                  :description="portfolio.subtitle"
+                  :wsl="portfolio.wsl"
+                />
+              </template>
+            </v-popover>
           </div>
         </div>
       </div>
@@ -35,6 +49,7 @@
 
 <script>
 import PortfolioCard from '~/components/shared/PortfolioCard'
+import PortfolioCardTooltip from '~/components/PortfolioCardTooltip'
 import BlogCard from '~/components/BlogCard'
 import Hero from '~/components/shared/Hero'
 import { mapState } from 'vuex'
@@ -42,7 +57,8 @@ export default {
   components: {
     PortfolioCard,
     BlogCard,
-    Hero
+    Hero,
+    PortfolioCardTooltip
   },
   computed: {
     ...mapState({
