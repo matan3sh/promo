@@ -96,4 +96,11 @@ export default {
     font-size: 20px;
     font-weight: bold;
   }
+  .sub-subtitle {
+    display: inline-flex;
+    i {
+      margin-left:700px;
+      padding-top: 20px;
+    }
+  }
 </style>

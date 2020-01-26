@@ -8,7 +8,7 @@
     />
     <section class="section">
       <div class="container">
-        <h1 class="title">Featured Courses</h1>
+        <h1 class="title">Featured Projects</h1>
         <div class="columns is-multiline">
           <!-- iterate columns with v-for and don't forget :key -->
           <div v-for="portfolio in portfolios" :key="portfolio._id" class="column is-one-quarter">
@@ -54,6 +54,9 @@ import BlogCard from '~/components/BlogCard'
 import Hero from '~/components/shared/Hero'
 import { mapState } from 'vuex'
 export default {
+  head: {
+        title: 'Matan Shaviro | Portfolio'
+  },
   components: {
     PortfolioCard,
     BlogCard,

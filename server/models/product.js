@@ -12,6 +12,7 @@ const productSchema = new Schema({
   wsl: [{type: Schema.Types.Mixed, value: String}],
   requirements: [{type: Schema.Types.Mixed, value: String}],
   promoVideoLink: String,
+  github: String,
   productLink: String,
   price: Number,
   discountedPrice: Number,

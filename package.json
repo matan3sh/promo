@@ -1,7 +1,7 @@
 {
-  "name": "promo-app",
+  "name": "Portfolio-Matan-Shaviro",
   "version": "1.0.0",
-  "description": "Matan Shaviro Portfolio",
+  "description": "Hey my name is Matan Shaviro I am a software engineer graduate (B.Sc). I have highly passion and motivation with this field. I am very enthusiastic hardworking and eager to face challenges.Excellent interpersonal communication skills and team player, self-learning abilities, responsible and highly motivated.",
   "author": "Matan Shaviro",
   "private": true,
   "scripts": {
@@ -24,6 +24,8 @@
     "express-session": "^1.16.2",
     "highlight.js": "^9.15.8",
     "jsonwebtoken": "^8.5.1",
+    "lingallery": "^1.3.3",
+    "mdbvue": "^6.3.0",
     "moment": "^2.24.0",
     "mongoose": "^5.6.0",
     "nuxt": "^2.11.0",
@@ -34,6 +36,8 @@
     "tiptap": "^1.23.0",
     "tiptap-extensions": "^1.26.1",
     "v-tooltip": "^2.0.3",
+    "vue-carousel": "^0.18.0",
+    "vue-gallery": "^2.0.1",
     "vue-toasted": "^1.1.27",
     "vue-youtube": "^1.4.0",
     "vuejs-paginate": "^2.1.0",

@@ -12,6 +12,7 @@
         :requirements="portfolio.requirements"
         :image="portfolio.image"
         :promoVideoLink="portfolio.promoVideoLink"
+        :github="portfolio.github"
       />
     </product-hero>
     <div class="container">
@@ -19,7 +20,7 @@
         <div class="column is-9">
           <div class="section">
             <div class="what-you-get">
-              <div class="what-you-get-title">What you will learn</div>
+              <div class="what-you-get-title">Which Tech Tools Did I Used</div>
               <ul class="what-you-get-items">
                 <!-- TODO: Iterate course wsl -->
                 <li v-for="wsl in portfolio.wsl" :key="wsl.value" class="what-you-get-item">
@@ -45,6 +46,14 @@
 import ProductHero from "~/components/ProductHero";
 import ProductHeroCard from "~/components/ProductHeroCard";
 export default {
+  head() {
+    return {
+      title: this.portfolio.title,
+      meta: [
+        { hid: 'description', name: 'description', content: this.portfolio.subtitle }
+      ]
+    }
+  },
   components: {
     ProductHero,
     ProductHeroCard

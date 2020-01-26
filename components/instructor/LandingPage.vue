@@ -106,6 +106,18 @@
             />
           </div>
         </div>
+        <div class="field">
+          <label class="label">Project Github Link</label>
+          <div class="control">
+            <input
+              :value="portfolio.github"
+              @input="($event) => emitPortfolioValue($event, 'github')"
+              class="input is-medium"
+              type="text"
+              placeholder="https://github.com/matan3sh/promo"
+            />
+          </div>
+        </div>
       </form>
     </div>
   </div>
