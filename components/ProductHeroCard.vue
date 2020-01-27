@@ -27,14 +27,14 @@
 
       <div class="content">
         <!-- <div class="m-b-none course-features">Use of Technologies</div> -->
-        <div class="has-text-centered">
+        <!-- <div class="has-text-centered">
             <p>
             NEW TECH TOOLS I LEARNED
           </p>
         </div>
         <ul class="m-t-none">
           <li v-for="req in requirements" :key="req.value">{{req.value}}</li>
-        </ul>
+        </ul> -->
         <div class="m-b-none course-features">Promo Video</div>
         <youtube :video-id="promoVideoLink" ref="youtube" @playing="playing"></youtube>
       </div>
