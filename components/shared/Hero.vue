@@ -13,7 +13,7 @@
         <h2 class="subtitle">
           {{subtitle}}
         </h2>
-        <a target="_" :href="promoLink" class="button is-danger">Learn More!</a>
+        <a :href="'/portfolios'" class="button is-danger">Learn More!</a>
       </div>
     </div>
   </section>

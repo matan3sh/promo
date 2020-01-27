@@ -17,17 +17,17 @@
         </div>
       </div>
       <div class="content">
-        {{portfolio.subtitle | shortenText(45)}}
+        {{portfolio.subtitle | shortenText(100)}}
         <br />
       </div>
-      <div class="price-box">
+      <!-- <div class="price-box">
         <span class="price">{{portfolio.price}}$</span>
         <span class="disc-price">{{portfolio.discountedPrice}}$</span>
-      </div>
+      </div> -->
     </div>
     <footer class="card-footer">
       <nuxt-link :to="`/portfolios/${portfolio.slug}`" class="card-footer-item">Learn More</nuxt-link>
-      <a target="_" :href="portfolio.productLink" class="card-footer-item">Enroll</a>
+      <!-- <a target="_" :href="portfolio.productLink" class="card-footer-item">Enroll</a> -->
     </footer>
   </div>
 </template>

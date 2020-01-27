@@ -1,5 +1,6 @@
 import Vue from 'vue'
 
+
 function separateBlogs(blogs) {
   const published = []
   const drafts = []
