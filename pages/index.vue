@@ -67,7 +67,7 @@ export default {
     ...mapState({
       portfolios: state => state.portfolio.items,
       featuredBlogs: state => state.blog.items.featured,
-      portfolioHero: state => state.hero.item
+      portfolioHero: state => state.hero.item || {}
     })
   },
   async fetch({store}) {
