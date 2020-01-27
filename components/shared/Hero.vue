@@ -68,7 +68,7 @@
     font-size: 45px;
   }
   .subtitle {
-    /*font-weight: bold;*/
+    font-weight: bold;
     font-size: 25px;
   }
   .author-name {
